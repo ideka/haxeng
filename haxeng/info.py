@@ -18,9 +18,10 @@
 #       MA 02110-1301, USA.
 
 from collections import OrderedDict
+
+import common
 import tools
 
-TERM_WIDTH = 79
 ASCII_ART = """
 cccc:cccccc     :::::cc  ........  ... .     .                   oooo
           .::     ::::::  ...   .     ...  ....                 @@@@@@
@@ -81,24 +82,24 @@ Las direcciones de e-mail son ficticias, al igual que lo es la historia y todos 
 
 def print_header(title, number):
     # TODO: Make this clearer?
-    print("[ ][O][ ]".ljust(TERM_WIDTH, "·"))
+    print("[ ][O][ ]".ljust(common.TERM_WIDTH, "·"))
     print(("[ ][ ][O] " +
            ("[{}] - {}".format(number, title) if number is not None
-            else title)).ljust(TERM_WIDTH - 1) + "·")
-    print("[O][O][O]".ljust(TERM_WIDTH, "·"))
+            else title)).ljust(common.TERM_WIDTH - 1) + "·")
+    print("[O][O][O]".ljust(common.TERM_WIDTH, "·"))
 
 
 def print_section(text):
     left = " :     :  "
     print(left)
-    lines = tools.formatted(text, TERM_WIDTH - len(left)).split("\n")
+    lines = tools.formatted(text, common.TERM_WIDTH - len(left)).split("\n")
     for line in lines:
         print(left + line)
     print(left)
 
 
 def print_eof():
-    print("[E][O][F]".ljust(TERM_WIDTH, "·"))
+    print("[E][O][F]".ljust(common.TERM_WIDTH, "·"))
 
 
 def print_info():
