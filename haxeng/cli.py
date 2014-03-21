@@ -396,7 +396,7 @@ class cmd_ul(Command):
             cls.print_msg("no es un archivo:", args[0])
             return
 
-        print("Descargando...")
+        print("Subiendo...")
         print(".{}.".format(" " * UPLOAD_STEPS))
         print(" ", end="")
         for i in range(UPLOAD_STEPS):
