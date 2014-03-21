@@ -26,6 +26,7 @@ import common
 from filesystem import File
 import system
 import tools
+import info
 
 
 class CLI(object):
@@ -409,12 +410,12 @@ class cmd_ul(Command):
 @CLI.command
 class cmd_info(Command):
     name = "info"
-    description = ""
+    description = "Muestra información sobre el juego."
     parameters = []
 
     @classmethod
     def run(cls, cli, args):
-        pass
+        info.print_info()
 
 
 @CLI.command
