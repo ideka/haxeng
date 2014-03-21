@@ -371,14 +371,39 @@ class cmd_dl(Command):
 @CLI.command
 class cmd_ul(Command):
     name = "ul"
-    description = ""
-    parameters = []
+    description = "Sube un archivo durante una sesión telnet."
+    parameters = ["ARCHIVO"]
     condition = (lambda cli: not cli.system.is_local,
                  "no estás en una sesión telnet")
 
     @classmethod
     def run(cls, cli, args):
-        pass
+        UPLOAD_TIME = 4
+        UPLOAD_STEPS = 20
+
+        dirlist = cli.game.system.abs_dirlist([],
+                                              tools.fix_slashes(args[0]).
+                                              split(os.path.sep))
+
+        try:
+            file_ = cli.game.system.retrieve(dirlist)
+        except KeyError:
+            cls.print_msg("archivo o directorio no encontrado:", args[0])
+            return
+        if not isinstance(file_, File):
+            cls.print_msg("no es un archivo:", args[0])
+            return
+
+        print("Descargando...")
+        print(".{}.".format(" " * UPLOAD_STEPS))
+        print(" ", end="")
+        for i in range(UPLOAD_STEPS):
+            print("¯", end="", flush=True)
+            time.sleep(UPLOAD_TIME / UPLOAD_STEPS)
+        print()
+
+        directory = cli.system.retrieve(cli.dirlist)
+        directory[dirlist[-1]] = file_
 
 
 @CLI.command
