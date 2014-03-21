@@ -65,7 +65,7 @@ Haxxor Engine y sus misiones fueron programadas y diseñadas por Gerardo Marset,
 
 En el 2009, poco después de aprender Python, decidí tratar de copiar HackTheGame para practicar el lenguaje. El resultado no fue malo, pero al revisitar el código en el 2014 no pude evitar notar que había mucho lugar para mejoras, por lo que decidí rehacerlo.
 
-Para contactarme por bugs, comentarios, etc: gammer1994@gmail.com"""
+Para contactarme por bugs, comentarios, etc: <gammer1994@gmail.com>"""
     ),
     (
         "Renuncia de responsabilidad",
