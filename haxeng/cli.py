@@ -23,6 +23,7 @@ import random
 import time
 
 from filesystem import File
+import system
 import tools
 
 DEBUG = True
@@ -175,9 +176,9 @@ class cmd_dir(Command):
     @classmethod
     def run(cls, cli, args):
         if len(args) == 1:
-            dirlist = cli.system.abs_dirlist(cli.dirlist[:],
-                                             tools.fix_slashes(args[0]).
-                                             split(os.path.sep))
+            dirlist = system.abs_dirlist(cli.dirlist[:],
+                                         tools.fix_slashes(args[0]).
+                                         split(os.path.sep))
         else:
             dirlist = cli.dirlist[:]
 
@@ -221,8 +222,9 @@ class cmd_cd(Command):
             print(cli.pwd)
             return
 
-        relative_dirlist = tools.fix_slashes(args[0]).split(os.path.sep)
-        dirlist = cli.system.abs_dirlist(cli.dirlist[:], relative_dirlist)
+        dirlist = system.abs_dirlist(cli.dirlist[:],
+                                     tools.fix_slashes(args[0]).
+                                     split(os.path.sep))
 
         if cli.system.is_file(dirlist):
             cls.print_msg("no es un directorio:", args[0])
@@ -243,11 +245,11 @@ class cmd_del(Command):
 
     @classmethod
     def run(cls, cli, args):
-        relative_dirlist = tools.fix_slashes(args[0]).split(os.path.sep)
-
+        dirlist = system.abs_dirlist(cli.dirlist[:],
+                                     tools.fix_slashes(args[0]).
+                                     split(os.path.sep))
         try:
-            cli.system.delete(cli.system.abs_dirlist(cli.dirlist[:],
-                                                     relative_dirlist))
+            system.delete(dirlist)
         except KeyError:
             cls.print_msg("archivo o directorio no encontrado:", args[0])
             return
@@ -345,11 +347,12 @@ class cmd_dl(Command):
         DOWNLOAD_TIME = 4
         DOWNLOAD_STEPS = 20
 
-        relative_dirlist = tools.fix_slashes(args[0]).split(os.path.sep)
+        dirlist = system.abs_dirlist(cli.dirlist[:],
+                                     tools.fix_slashes(args[0]).
+                                     split(os.path.sep))
 
         try:
-            file_ = cli.system.retrieve(
-                cli.system.abs_dirlist(cli.dirlist[:], relative_dirlist))
+            file_ = cli.system.retrieve(dirlist)
         except KeyError:
             cls.print_msg("archivo o directorio no encontrado:", args[0])
             return
@@ -381,9 +384,8 @@ class cmd_ul(Command):
         UPLOAD_TIME = 4
         UPLOAD_STEPS = 20
 
-        dirlist = cli.game.system.abs_dirlist([],
-                                              tools.fix_slashes(args[0]).
-                                              split(os.path.sep))
+        dirlist = system.abs_dirlist([], tools.fix_slashes(args[0]).
+                                     split(os.path.sep))
 
         try:
             file_ = cli.game.system.retrieve(dirlist)

@@ -27,18 +27,6 @@ class System(object):
         self.ip = ip
         self.is_local = is_local
 
-    def abs_dirlist(self, dirlist, relative_dirlist):
-        for dir_ in relative_dirlist:
-            if dir_ == ".":
-                continue
-            if dir_ == "..":
-                if len(dirlist) <= 1:
-                    continue
-                dirlist.pop()
-                continue
-            dirlist.append(dir_)
-        return dirlist
-
     def retrieve(self, dirlist):
         fs = self.filesystem
         for dir_ in dirlist:
@@ -74,6 +62,19 @@ class System(object):
 
         for target in targets:
             del parent[target]
+
+
+def abs_dirlist(dirlist, relative_dirlist):
+    for dir_ in relative_dirlist:
+        if dir_ == ".":
+            continue
+        if dir_ == "..":
+            if len(dirlist) <= 1:
+                continue
+            dirlist.pop()
+            continue
+        dirlist.append(dir_)
+    return dirlist
 
 
 def default_local_system():
