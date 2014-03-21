@@ -342,7 +342,30 @@ class cmd_dl(Command):
 
     @classmethod
     def run(cls, cli, args):
-        pass
+        DOWNLOAD_TIME = 4
+        DOWNLOAD_STEPS = 20
+
+        relative_dirlist = tools.fix_slashes(args[0]).split(os.path.sep)
+
+        try:
+            file_ = cli.system.retrieve(
+                cli.system.abs_dirlist(cli.dirlist[:], relative_dirlist))
+        except KeyError:
+            cls.print_msg("archivo o directorio no encontrado:", args[0])
+            return
+        if not isinstance(file_, File):
+            cls.print_msg("no es un archivo:", args[0])
+            return
+
+        print("Descargando...")
+        print(".{}.".format(" " * DOWNLOAD_STEPS))
+        print(" ", end="")
+        for i in range(DOWNLOAD_STEPS):
+            print("¯", end="", flush=True)
+            time.sleep(DOWNLOAD_TIME / DOWNLOAD_STEPS)
+        print()
+
+        cli.game.mission.downloads.append(file_)
 
 
 @CLI.command
