@@ -62,7 +62,7 @@ def random_password():
          "princess",
          "azerty",
          "trustno1",
-         "root"
+         "root",
          "secret"],
         1)[0]
 
