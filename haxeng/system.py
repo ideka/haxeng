@@ -32,7 +32,7 @@ class System(object):
             if dir_ == ".":
                 continue
             if dir_ == "..":
-                if len(dirlist) == 1:
+                if len(dirlist) <= 1:
                     continue
                 dirlist.pop()
                 continue
