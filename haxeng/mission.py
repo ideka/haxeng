@@ -63,8 +63,6 @@ class Mission(object):
         self.email.message = self.substitute(game, self.email.message)
         self.asciiart = self.substitute(game, self.asciiart)
         self.prepare_filesystem(game)
-        #import json
-        #print(json.dumps(self.filesystem, indent=4, default=lambda o: o.id_))
 
     def prepare_filesystem(self, game, s=None):
         if s is None:
