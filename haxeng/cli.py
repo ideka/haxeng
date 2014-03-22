@@ -466,7 +466,7 @@ class cmd_save(Command):
     @classmethod
     def run(cls, cli, args):
         cli.game.save()
-        cli.print_msg("partida guardada correctamente")
+        cls.print_msg("partida guardada correctamente")
 
 
 @CLI.command
