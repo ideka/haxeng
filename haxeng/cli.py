@@ -460,6 +460,8 @@ class cmd_save(Command):
     name = "save"
     description = "Guarda la partida."
     parameters = []
+    condition = (lambda cli: cli.system.is_local,
+                 "no es posible guardar durante una misión")
 
     @classmethod
     def run(cls, cli, args):
