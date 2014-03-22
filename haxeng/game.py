@@ -16,6 +16,7 @@
 #       along with Haxxor Engine.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import time
 import json
 
 import tools
@@ -66,7 +67,14 @@ class Game(object):
 
     def main_loop(self):
         while self.running:
+            ms = time.time()
+
             self.cli.prompt()
+
+            if not self.cli.system.is_local:
+                if self.mission.ip_tracker.update(time.time() - ms,
+                                                  self.system.ip):
+                    self.telnet_end()
 
     def load(self):
         with open(SAVEGAME.format(self.name), "r") as f:

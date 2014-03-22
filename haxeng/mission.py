@@ -16,12 +16,15 @@
 #       along with Haxxor Engine.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
+import random
 
 from enum import Enum
 from filesystem import File, FileSpawner
 import system
 import tools
 
+DIFFICULTY = 3  # Must be at least 1.
+TRACKER_UPDATE_INTERVAL = 1  # In seconds.
 
 Objective = Enum(
     "download",
@@ -41,7 +44,7 @@ class Mission(object):
         self.asciiart = asciiart
         self.filesystem = filesystem
         self.objectives = objectives
-        self.security = security
+        self.ip_tracker = IPTracker(security)
 
         self.downloads = []
 
@@ -118,3 +121,54 @@ class Mission(object):
         if self._password is None:
             self._password = tools.random_password()
         return self._password
+
+
+class IPTracker(object):
+    def __init__(self, speed):
+        assert(speed > 0)
+        self.speed = speed
+        self.ip = None
+        self.time = 0
+
+    def generate_first_ip(self, towards):
+        ip = []
+        quotients = list(range(1, 5))
+        random.shuffle(quotients)
+        for octet, quotient in zip(towards.split("."), quotients):
+            octet = int(octet) + 1
+            if octet > 127:
+                octet -= 128 // quotient
+            else:
+                octet += 128 // quotient
+            ip.append(octet)
+
+        return ".".join(map(str, ip))
+
+    def update(self, time, towards):
+        self.time += time
+        while self.time >= 1:
+            if self.step(towards):
+                return True
+            self.time -= 1
+        return False
+
+    def step(self, towards):
+        assert(DIFFICULTY > 0)
+        if self.ip is None:
+            self.ip = self.generate_first_ip(towards)
+
+        fromip = list(map(int, self.ip.split(".")))
+        toip = list(map(int, towards.split(".")))
+
+        nlist = list(range(len(fromip)))
+        random.shuffle(nlist)
+        for n in nlist:
+            if fromip[n] != toip[n]:
+                break
+        fromip[n] = tools.approach(fromip[n], toip[n], tools.dice(self.speed,
+                                                                  DIFFICULTY))
+        self.ip = ".".join(map(str, fromip))
+        #x = 0
+        #for fromoctet, tooctet in zip(fromip, toip):
+        #    x += abs(fromoctet - tooctet)
+        return fromip == toip

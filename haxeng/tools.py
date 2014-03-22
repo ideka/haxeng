@@ -130,3 +130,15 @@ def yn(prompt, default=None):
                 return default
         else:
             return response == "y"
+
+
+def dice(number, sides):
+    return sum(random.randint(1, sides) for x in range(number))
+
+
+def approach(from_, to, speed):
+    if from_ < to:
+        from_ = min(from_ + speed, to)
+    else:
+        from_ = max(from_ - speed, to)
+    return from_

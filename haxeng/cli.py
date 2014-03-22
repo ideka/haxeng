@@ -471,12 +471,14 @@ class cmd_save(Command):
 @CLI.command
 class cmd_track(Command):
     name = "track"
-    description = ""
+    description = "Muestra el progreso del rastreo de tu IP."
     parameters = []
+    condition = (lambda cli: not cli.system.is_local,
+                 "tu IP no está siendo rastreada")
 
     @classmethod
     def run(cls, cli, args):
-        pass
+        print(cli.game.mission.ip_tracker.ip)
 
 
 @CLI.command

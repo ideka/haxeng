@@ -371,7 +371,7 @@ Cuando termines esperá a más instrucciones.
             FileID.trojan_client_v3: Objective.download,
             FileID.inst: Objective.download
         },
-        0
+        1
     ),
 # }}}
 
