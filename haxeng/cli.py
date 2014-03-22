@@ -20,7 +20,6 @@ import os.path
 import random
 import time
 
-import common
 from filesystem import File
 import system
 import tools
@@ -76,10 +75,10 @@ class CLI(object):
             self.parse_input(tools.iinput(self.pwd + ">"))
         except EOFError:
             print()
-            if common.DEBUG or tools.yn("¿Seguro que querés salir?", False):
+            if tools.DEBUG or tools.yn("¿Seguro que querés salir?", False):
                 self.game.running = False
         except Exception as e:
-            if common.DEBUG:
+            if tools.DEBUG:
                 raise
             else:
                 print("betch: excepción no manejada:", sys.exc_info()[0], e)
@@ -430,16 +429,16 @@ class cmd_mail(Command):
             return
 
         email = cli.game.mission.email
-        print(" " + "_" * (common.TERM_WIDTH - 2))
+        print(" " + "_" * (tools.TERM_WIDTH - 2))
         print("|{}|".format("De: {} ({})".
                             format(email.sender, email.sender_email).
-                            center(common.TERM_WIDTH - 2)))
-        print("|" + "-" * (common.TERM_WIDTH - 2) + "|")
+                            center(tools.TERM_WIDTH - 2)))
+        print("|" + "-" * (tools.TERM_WIDTH - 2) + "|")
         print("|{}|".format("Asunto: {}".format(email.subject).
-                            center(common.TERM_WIDTH - 2)))
-        print(" " + "¯" * (common.TERM_WIDTH - 2))
-        print(tools.formatted(email.message, common.TERM_WIDTH))
-        print("-" * common.TERM_WIDTH)
+                            center(tools.TERM_WIDTH - 2)))
+        print(" " + "¯" * (tools.TERM_WIDTH - 2))
+        print(tools.formatted(email.message, tools.TERM_WIDTH))
+        print("-" * tools.TERM_WIDTH)
 
 
 @CLI.command

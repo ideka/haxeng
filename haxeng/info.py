@@ -17,7 +17,6 @@
 
 from collections import OrderedDict
 
-import common
 import tools
 
 ASCII_ART = """
@@ -80,24 +79,24 @@ Las direcciones de e-mail son ficticias, al igual que lo es la historia y todos 
 
 def print_header(title, number):
     # TODO: Make this clearer?
-    print("[ ][O][ ]".ljust(common.TERM_WIDTH, "·"))
+    print("[ ][O][ ]".ljust(tools.TERM_WIDTH, "·"))
     print(("[ ][ ][O] " +
            ("[{}] - {}".format(number, title) if number is not None
-            else title)).ljust(common.TERM_WIDTH - 1) + "·")
-    print("[O][O][O]".ljust(common.TERM_WIDTH, "·"))
+            else title)).ljust(tools.TERM_WIDTH - 1) + "·")
+    print("[O][O][O]".ljust(tools.TERM_WIDTH, "·"))
 
 
 def print_section(text):
     left = " :     :  "
     print(left)
-    lines = tools.formatted(text, common.TERM_WIDTH - len(left)).split("\n")
+    lines = tools.formatted(text, tools.TERM_WIDTH - len(left)).split("\n")
     for line in lines:
         print(left + line)
     print(left)
 
 
 def print_eof():
-    print("[E][O][F]".ljust(common.TERM_WIDTH, "·"))
+    print("[E][O][F]".ljust(tools.TERM_WIDTH, "·"))
 
 
 def print_info():

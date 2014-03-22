@@ -19,6 +19,9 @@ import os.path
 import random
 import signal
 
+TERM_WIDTH = 79
+DEBUG = True
+
 original_sigint = signal.getsignal(signal.SIGINT)
 signal.signal(signal.SIGINT, lambda a, b: None)
 
