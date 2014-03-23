@@ -16,7 +16,6 @@
 #       along with Haxxor Engine.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import os.path
 import random
 import time
 
