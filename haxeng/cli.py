@@ -379,7 +379,6 @@ class cmd_dl(Command):
         if file_.id_ in cli.game.mission.objectives and \
            cli.game.mission.objectives[file_.id_] == Objective.download:
             del cli.game.mission.objectives[file_.id_]
-        print(cli.game.mission.objectives)
         cli.game.mission.downloads.append((dirlist[-1], file_))
 
 
