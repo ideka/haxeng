@@ -254,8 +254,8 @@ Suerte, y no te olvides de borrar el log de telnet.
             }
         },
         {
-            FileID.telnet_log, Objective.delete,
-            FileID.c23, Objective.download
+            FileID.telnet_log: Objective.delete,
+            FileID.c23: Objective.download
         },
         1
     ),
@@ -309,10 +309,10 @@ La IP del estudio es {remote_ip} y el otro día abrí el puerto {port}, espero q
             }
         },
         {
-            FileID.telnet_log, Objective.delete,
-            FileID.tajo1, Objective.download,
-            FileID.tajo2, Objective.download,
-            FileID.tajo3, Objective.download
+            FileID.telnet_log: Objective.delete,
+            FileID.tajo1: Objective.download,
+            FileID.tajo2: Objective.download,
+            FileID.tajo3: Objective.download
         },
         3
     ),
