@@ -97,6 +97,12 @@ class Mission(object):
         )
         return text
 
+    def is_complete(self):
+        for key, value in self.objectives.items():
+            if key is not None or not value(self.system):
+                return False
+        return True
+
     @property
     def system(self):
         if self._system is None:

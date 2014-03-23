@@ -26,6 +26,7 @@ import system
 import missions
 
 SAVEGAME = "{}.sav"
+DOWNLOADS_DIR = "C:\\Descargas"
 
 
 class Game(object):
@@ -34,7 +35,7 @@ class Game(object):
 
         print("Bienvenido a Haxxor Engine.")
         try:
-            self.name = "test"  # ask_for_name()
+            self.name = "test" if tools.DEBUG else ask_for_name()
         except EOFError:
             self.running = False
             return
@@ -74,7 +75,8 @@ class Game(object):
             if not self.cli.system.is_local:
                 if self.mission.ip_tracker.update(time.time() - ms,
                                                   self.system.ip):
-                    self.telnet_end()
+                    self.telnet_end("Conexión perdida.\nTu IP fue rastreada.",
+                                    True)
 
     def load(self):
         with open(SAVEGAME.format(self.name), "r") as f:
@@ -121,11 +123,22 @@ class Game(object):
         if not self.cli.telnet_login():
             self.telnet_end()
 
-    def telnet_end(self):
+    def telnet_end(self, message="Conexión cerrada.", force_fail=False):
         self.cli.system = self.system
         self.clear()
-        print("Conexión cerrada.")
-        self.start_mission(self.mission)
+        print(message)
+        if force_fail or not self.mission.is_complete():
+            print("Misión fallida.")
+            self.start_mission(self.mission)
+            return
+
+        print("Misión superada.")
+        downloads_dir = self.system.retrieve(tools.fix_slashes(DOWNLOADS_DIR).
+                                             split(os.path.sep))
+        for file_name, file_ in self.mission.downloads:
+            downloads_dir[file_name] = file_
+        self.mission_id += 1
+        self.start_mission()
 
 
 def default_aliases():

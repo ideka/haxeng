@@ -21,6 +21,7 @@ import random
 import time
 
 from filesystem import File
+from mission import Objective
 import system
 import tools
 import info
@@ -95,6 +96,9 @@ class CLI(object):
             except KeyboardInterrupt:
                 print()
                 return False
+
+            if tools.DEBUG:
+                return True
 
             if user == self.game.mission.user and \
                password == self.game.mission.password:
@@ -245,10 +249,12 @@ class cmd_del(Command):
                                      tools.fix_slashes(args[0]).
                                      split(os.path.sep))
         try:
-            system.delete(dirlist)
+            file_ = cli.system.retrieve(dirlist)
         except KeyError:
             cls.print_msg("archivo o directorio no encontrado:", args[0])
             return
+
+        cli.system.delete(dirlist)
 
         cls.print_msg("ok")
 
@@ -256,6 +262,11 @@ class cmd_del(Command):
             cls.print_error("el directorio actual fue borrado, "
                             "volviendo a la raíz")
             cli.dirlist = cli.dirlist[:1]
+
+        if not cli.system.is_local and \
+           file_.id_ in cli.game.mission.objectives and \
+           cli.game.mission.objectives[file_.id_] == Objective.delete:
+            del cli.game.mission.objectives[file_.id_]
 
 
 @CLI.command
@@ -272,7 +283,8 @@ class cmd_ping(Command):
         print("Haciendo ping a {} con 32 bytes de datos:".format(ip))
         print()
         for i in range(4):
-            time.sleep(.5)
+            if not tools.DEBUG:
+                time.sleep(.5)
             if valid:
                 print("Respuesta desde {}: bytes=32 tiempo<1m TTL=64".
                       format(ip))
@@ -299,22 +311,26 @@ class cmd_telnet(Command):
         host = args[0]
         port = args[1] if len(args) > 1 else 23
         print("Conectándose a {}".format(host), end="", flush=True)
-        #time.sleep(1.5)
+        if not tools.DEBUG:
+            time.sleep(1.5)
         for i in range(3):
             print(".", end="", flush=True)
-            #time.sleep(1.5)
+            if not tools.DEBUG:
+                time.sleep(1.5)
         print()
 
         if host != cli.game.mission.system.ip or \
            port != cli.game.mission.port:
             cls.print_msg("no se puede abrir la conexión al host, "
                           "en puerto {}".format(port))
-            return
+            if not tools.DEBUG:
+                return
 
         cli.clear()
-        for i in range(random.randint(10000, 30000)):
-            print(random.randint(0, 1), end=" ", flush=True)
-            time.sleep(0.00001)
+        if not tools.DEBUG:
+            for i in range(random.randint(10000, 30000)):
+                print(random.randint(0, 1), end=" ", flush=True)
+                time.sleep(0.00001)
         print()
         cli.game.telnet_start()
 
@@ -361,10 +377,15 @@ class cmd_dl(Command):
         print(" ", end="")
         for i in range(DOWNLOAD_STEPS):
             print("¯", end="", flush=True)
-            time.sleep(DOWNLOAD_TIME / DOWNLOAD_STEPS)
+            if not tools.DEBUG:
+                time.sleep(DOWNLOAD_TIME / DOWNLOAD_STEPS)
         print()
 
-        cli.game.mission.downloads.append(file_)
+        if file_.id_ in cli.game.mission.objectives and \
+           cli.game.mission.objectives[file_.id_] == Objective.download:
+            del cli.game.mission.objectives[file_.id_]
+        print(cli.game.mission.objectives)
+        cli.game.mission.downloads.append((dirlist[-1], file_))
 
 
 @CLI.command
@@ -397,11 +418,16 @@ class cmd_ul(Command):
         print(" ", end="")
         for i in range(UPLOAD_STEPS):
             print("¯", end="", flush=True)
-            time.sleep(UPLOAD_TIME / UPLOAD_STEPS)
+            if not tools.DEBUG:
+                time.sleep(UPLOAD_TIME / UPLOAD_STEPS)
         print()
 
         directory = cli.system.retrieve(cli.dirlist)
         directory[dirlist[-1]] = file_
+
+        if file_.id_ in cli.game.mission.objectives and \
+           cli.game.mission.objectives[file_.id_] == Objective.upload:
+            del cli.game.mission.objectives[file_.id_]
 
 
 @CLI.command
