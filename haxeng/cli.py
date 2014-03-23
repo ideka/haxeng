@@ -144,7 +144,8 @@ class Command(object):
             cls.print_msg(cls.condition[1])
             return
 
-        if not cls.minimum_parameters() <= len(args) <= len(cls.parameters):
+        if not cls.minimum_parameters() <= len(args) and \
+           (len(args) <= len(cls.parameters) or "..." in args):
             cls.print_syntax()
             return
         cls.run(cli, args)
@@ -556,3 +557,22 @@ class cmd_unalias(Command):
             cls.print_msg("alias no encontrado:", args[0])
         else:
             cls.print_msg("ok")
+
+if tools.DEBUG:
+    @CLI.command
+    class cmd_exec(Command):
+        name = "exec"
+        description = "Evalúa código Python."
+        parameters = ["CÓDIGO", "..."]
+
+        @classmethod
+        def run(cls, cli, args):
+            code = " ".join(args)
+            try:
+                exec(code, globals(), {
+                    "cli": cli,
+                    "game": cli.game,
+                    "mission": cli.game.mission
+                })
+            except BaseException as e:
+                print("{}: {}".format(type(e).__name__, e))
