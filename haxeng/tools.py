@@ -72,6 +72,10 @@ def fix_slashes(path):
     return path.replace("\\", os.path.sep).replace("/", os.path.sep)
 
 
+def dir_to_dirlist(dir_):
+    return fix_slashes(dir_).split(os.path.sep)
+
+
 def format_dirlist(dirlist):
     return "\\".join(dirlist) + "\\" * (len(dirlist) == 1)
 

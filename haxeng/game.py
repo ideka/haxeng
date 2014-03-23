@@ -133,8 +133,8 @@ class Game(object):
             return
 
         print("Misión superada.")
-        downloads_dir = self.system.retrieve(tools.fix_slashes(DOWNLOADS_DIR).
-                                             split(os.path.sep))
+        downloads_dir = self.system.retrieve(tools.
+                                             dir_to_dirlist(DOWNLOADS_DIR))
         for file_name, file_ in self.mission.downloads:
             downloads_dir[file_name] = file_
         self.mission_id += 1

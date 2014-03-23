@@ -177,8 +177,7 @@ class cmd_dir(Command):
     def run(cls, cli, args):
         if len(args) == 1:
             dirlist = system.abs_dirlist(cli.dirlist[:],
-                                         tools.fix_slashes(args[0]).
-                                         split(os.path.sep))
+                                         tools.dir_to_dirlist(args[0]))
         else:
             dirlist = cli.dirlist[:]
 
@@ -223,8 +222,7 @@ class cmd_cd(Command):
             return
 
         dirlist = system.abs_dirlist(cli.dirlist[:],
-                                     tools.fix_slashes(args[0]).
-                                     split(os.path.sep))
+                                     tools.dir_to_dirlist(args[0]))
 
         if cli.system.is_file(dirlist):
             cls.print_msg("no es un directorio:", args[0])
@@ -246,8 +244,7 @@ class cmd_del(Command):
     @classmethod
     def run(cls, cli, args):
         dirlist = system.abs_dirlist(cli.dirlist[:],
-                                     tools.fix_slashes(args[0]).
-                                     split(os.path.sep))
+                                     tools.dir_to_dirlist(args[0]))
         try:
             file_ = cli.system.retrieve(dirlist)
         except KeyError:
@@ -360,8 +357,7 @@ class cmd_dl(Command):
         DOWNLOAD_STEPS = 20
 
         dirlist = system.abs_dirlist(cli.dirlist[:],
-                                     tools.fix_slashes(args[0]).
-                                     split(os.path.sep))
+                                     tools.dir_to_dirlist(args[0]))
 
         try:
             file_ = cli.system.retrieve(dirlist)
@@ -401,8 +397,7 @@ class cmd_ul(Command):
         UPLOAD_TIME = 4
         UPLOAD_STEPS = 20
 
-        dirlist = system.abs_dirlist([], tools.fix_slashes(args[0]).
-                                     split(os.path.sep))
+        dirlist = system.abs_dirlist([], tools.dir_to_dirlist(args[0]))
 
         try:
             file_ = cli.game.system.retrieve(dirlist)
